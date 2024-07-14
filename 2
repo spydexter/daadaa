@@ -1,0 +1,55 @@
+#include<stdio.h>
+#include<time.h>  // Include time.h for clock_t and clock()
+
+int a[20][20], reach[20], n;
+
+void dfs(int v) {
+    int i;
+    reach[v] = 1;
+    for (i = 1; i <= n; i++) {
+        if (a[v][i] && !reach[i]) {
+            printf("\n %d->%d", v, i);
+            dfs(i);
+        }
+    }
+}
+
+int main(int argc, char **argv) {
+    int i, j, count = 0;
+    
+    printf("\n Enter number of vertices:");
+    scanf("%d", &n);
+    
+    for (i = 1; i <= n; i++) {
+        reach[i] = 0;
+        for (j = 1; j <= n; j++)
+            a[i][j] = 0;
+    }
+    
+    printf("\n Enter the adjacency matrix:\n");
+    for (i = 1; i <= n; i++)
+        for (j = 1; j <= n; j++)
+            scanf("%d", &a[i][j]);
+    
+    clock_t start = clock();  // Start measuring time
+    dfs(1);
+    clock_t end = clock();  // End measuring time
+    
+    double time_taken = ((double) (end - start)) / CLOCKS_PER_SEC;  // Calculate time taken in seconds
+    
+    printf("\n");
+    
+    for (i = 1; i <= n; i++) {
+        if (reach[i])
+            count++;
+    }
+    
+    if (count == n)
+        printf("\n Graph is connected");
+    else
+        printf("\n Graph is not connected");
+    
+    printf("\n Time taken by DFS: %f seconds\n", time_taken);
+    
+    return 0;
+}
